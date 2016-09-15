@@ -15,19 +15,34 @@ import android.widget.TextView;
 
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.util.ContentValue;
+import com.turing.androidsdk.InitListener;
+import com.turing.androidsdk.SDKInit;
+import com.turing.androidsdk.SDKInitBuilder;
+import com.turing.androidsdk.TuringApiManager;
 import com.turing.androidsdk.asr.VoiceRecognizeListener;
 import com.turing.androidsdk.asr.VoiceRecognizeManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import turing.os.http.core.ErrorMessage;
+import turing.os.http.core.HttpConnectionListener;
+import turing.os.http.core.RequestResult;
 
 public class ChatActivity extends AppCompatActivity {
 
     private Context context;
+    private static final String TAG="ChatActivity";
     private static final int RECOGNIZE_END=1;
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
+    private static final int RESULT_OK=4;
 
-    private VoiceRecognizeManager vrmanager;
+    private VoiceRecognizeManager mVoiceRecognizeManager;
+    private TuringApiManager mTuringApiManager;
 
     private TextView tv_recognizer;
+    private TextView tv_result;
     private Button btn_recognizer;
 
     private Handler handler=new Handler(){
@@ -48,6 +63,10 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setClickable(true);
                     String error= (String) msg.obj;
                     tv_recognizer.setText(error);
+                    break;
+                case RESULT_OK:
+                    tv_result.setText((String)msg.obj);
+                    break;
             }
         }
     };
@@ -56,18 +75,21 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        context=getApplicationContext();
+        context=this;
 
         tv_recognizer= (TextView) findViewById(R.id.tv_recognizer);
+        tv_result= (TextView) findViewById(R.id.tv_result);
         btn_recognizer= (Button) findViewById(R.id.btn_recognizer);
 
+        //初始化SDK
+        initSDK();
         //语音识别
         initVoice();
 
         btn_recognizer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vrmanager.startRecognize();
+                mVoiceRecognizeManager.startRecognize();
                 btn_recognizer.setText("说话中...");
                 btn_recognizer.setClickable(false);
             }
@@ -75,35 +97,88 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 初始化SDK
+     * */
+    private void initSDK() {
+
+        SDKInitBuilder builder = new SDKInitBuilder(this)
+                .setSecret(ContentValue.trSECRET_KEY).setTuringKey(ContentValue.trAPI_KEY)
+                .setUniqueId(ContentValue.trUNIQUE_ID);
+
+        SDKInit.init(builder, new InitListener() {
+            @Override
+            public void onFail(String error) {
+                Log.i(TAG, error);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG, "SDK Complete");
+                // 获取userid成功后，才可以请求Turing服务器，需要请求必须在此回调成功，才可正确请求
+                mTuringApiManager = new TuringApiManager(context);
+                mTuringApiManager.setHttpListener(myHttpConnectionListener);
+            }
+        });
+    }
+
+    /**
+     * 网络请求回调
+     */
+    HttpConnectionListener myHttpConnectionListener = new HttpConnectionListener() {
+
+        @Override
+        public void onSuccess(RequestResult result) {
+            if (result != null) {
+                try {
+                    Log.i(TAG, result.getContent().toString());
+                    JSONObject result_obj = new JSONObject(result.getContent().toString());
+
+                    if (result_obj.has("text")) {
+                        Log.i(TAG, result_obj.get("text").toString());
+                        handler.obtainMessage(RESULT_OK, result_obj.get("text")).sendToTarget();
+                    }
+                } catch (JSONException e) {
+                    Log.i(TAG, "JSONException:" + e.getMessage());
+                }
+            }
+        }
+
+        @Override
+        public void onError(ErrorMessage errorMessage) {
+            Log.i(TAG, "ERROR:"+errorMessage.getMessage());
+        }
+    };
 
     /**
      * 语音识别
      * */
     private void initVoice() {
 
-        vrmanager=new VoiceRecognizeManager(context, ContentValue.bdAPI_KEY,ContentValue.bdSECRET_KYE);
+        mVoiceRecognizeManager=new VoiceRecognizeManager(context, ContentValue.bdAPI_KEY,ContentValue.bdSECRET_KYE);
 
-        vrmanager.setVoiceRecognizeListener(new VoiceRecognizeListener() {
+        mVoiceRecognizeManager.setVoiceRecognizeListener(new VoiceRecognizeListener() {
             @Override
             public void onStartRecognize() {
-                Log.i("Recognize", "Start1");
+                Log.i(TAG, "Recognize Start1");
             }
 
             @Override
             public void onRecordStart() {
-                Log.i("Recognize", "Start2");
+                Log.i(TAG, "Recognize Start2");
             }
 
             @Override
             public void onRecordEnd() {
-                Log.i("Recognize", "End");
+                Log.i(TAG, "Recognize End");
                 handler.sendEmptyMessage(RECOGNIZE_END);
             }
 
             @Override
             public void onRecognizeResult(String s) {
+                Log.i(TAG,"识别成功"+s);
                 if (s!=null) {
-                    Log.i("Recognize","识别成功"+s);
+                    mTuringApiManager.requestTuringAPI(s);
                     handler.obtainMessage(RECOGNIZE_RESULT,s).sendToTarget();
                 }else {
                     //无法识别的语音
@@ -113,7 +188,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onRecognizeError(String s) {
-                Log.i("Recognize","识别错误"+s);
+                Log.i(TAG,"识别错误"+s);
                 if (s!=null) {
                     handler.obtainMessage(RECOGNIZE_ERROR, s).sendToTarget();
                 }

@@ -9,8 +9,14 @@
     <TextView android:text="@string/tv_recognizer" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_recognizer"/>
-    <Button
+    <TextView
+        android:text="@string/tv_result"
+        android:id="@+id/tv_result"
         android:layout_below="@id/tv_recognizer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_below="@id/tv_result"
         android:text="@string/btn_recognizer"
         android:id="@+id/btn_recognizer"
         android:layout_width="wrap_content"
