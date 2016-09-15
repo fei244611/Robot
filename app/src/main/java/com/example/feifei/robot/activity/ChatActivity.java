@@ -39,14 +39,15 @@ public class ChatActivity extends AppCompatActivity {
                     break;
                 case RECOGNIZE_RESULT:
                     btn_recognizer.setText("开始识别");
+                    btn_recognizer.setClickable(true);
                     String result= (String) msg.obj;
                     tv_recognizer.setText("识别结果"+result);
                     break;
                 case RECOGNIZE_ERROR:
                     btn_recognizer.setText("开始识别");
+                    btn_recognizer.setClickable(true);
                     String error= (String) msg.obj;
                     tv_recognizer.setText(error);
-                    vrmanager.stopRecognize();
             }
         }
     };
@@ -68,6 +69,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 vrmanager.startRecognize();
                 btn_recognizer.setText("说话中...");
+                btn_recognizer.setClickable(false);
             }
         });
 
@@ -95,30 +97,32 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onRecordEnd() {
                 Log.i("Recognize", "End");
-
+                handler.sendEmptyMessage(RECOGNIZE_END);
             }
 
             @Override
             public void onRecognizeResult(String s) {
-                Log.i("Recognize", s);
-                Message msg = new Message();
-                msg.what = RECOGNIZE_RESULT;
-                msg.obj = s;
-                handler.sendMessage(msg);
-                vrmanager.stopRecognize();
+                if (s!=null) {
+                    Log.i("Recognize","识别成功"+s);
+                    handler.obtainMessage(RECOGNIZE_RESULT,s).sendToTarget();
+                }else {
+                    //无法识别的语音
+                    handler.obtainMessage(RECOGNIZE_RESULT,"识别失败").sendToTarget();
+                }
             }
 
             @Override
             public void onRecognizeError(String s) {
-                Log.i("Recognize", s);
-                vrmanager.stopRecognize();
-                handler.sendEmptyMessage(RECOGNIZE_ERROR);
+                Log.i("Recognize","识别错误"+s);
+                if (s!=null) {
+                    handler.obtainMessage(RECOGNIZE_ERROR, s).sendToTarget();
+                }
+
             }
 
             @Override
             public void onVolumeChange(int i) {
-                Log.i("Recognize", "Change");
-
+                //讯飞调用
             }
         });
 
