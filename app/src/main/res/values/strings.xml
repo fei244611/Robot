@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="btn_chat">聊天</string>
+    <string name="tv_recognizer">开始识别</string>
+    <string name="btn_recognizer">开始识别</string>
 </resources>

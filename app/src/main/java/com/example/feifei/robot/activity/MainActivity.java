@@ -1,22 +1,39 @@
-package com.example.feifei.robot;
+package com.example.feifei.robot.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class ChatActivity extends AppCompatActivity {
+import com.example.feifei.robot.R;
+
+public class MainActivity extends AppCompatActivity {
+    private Button btn_chat;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        context=this;
+        setContentView(R.layout.activity_main);
+
+        btn_chat= (Button) findViewById(R.id.btn_chat);
+        btn_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,ChatActivity.class));
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
