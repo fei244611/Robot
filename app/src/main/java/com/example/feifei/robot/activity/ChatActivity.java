@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.util.ContentValue;
+import com.example.feifei.robot.util.TTSUtil;
+import com.example.feifei.robot.util.VoiceUtil;
 import com.turing.androidsdk.InitListener;
 import com.turing.androidsdk.SDKInit;
 import com.turing.androidsdk.SDKInitBuilder;
@@ -39,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
     private static final int RESULT_OK=4;
-    private static final int Speech_START=5;
+
 
     private VoiceRecognizeManager mVoiceRecognizeManager;
     private TuringApiManager mTuringApiManager;
@@ -61,6 +63,7 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setClickable(true);
                     String result= (String) msg.obj;
                     tv_recognizer.setText("识别结果"+result);
+                    mTuringApiManager.requestTuringAPI(result);
                     break;
                 case RECOGNIZE_ERROR:
                     btn_recognizer.setText("开始识别");
@@ -71,8 +74,6 @@ public class ChatActivity extends AppCompatActivity {
                 case RESULT_OK:
                     tv_result.setText((String)msg.obj);
                     ttsManager.startTTS((String) msg.obj);
-                    break;
-                case Speech_START:
                     break;
             }
         }
@@ -88,12 +89,12 @@ public class ChatActivity extends AppCompatActivity {
         tv_result= (TextView) findViewById(R.id.tv_result);
         btn_recognizer= (Button) findViewById(R.id.btn_recognizer);
 
+        //语音识别
+        mVoiceRecognizeManager=VoiceUtil.initVoice(context,handler);
         //语音合成
-        initTTS();
+        ttsManager= TTSUtil.initTTS(context,handler);
         //初始化SDK
         initSDK();
-        //语音识别
-        initVoice();
 
         btn_recognizer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,45 +105,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    /**
-     * 语音合成
-     * */
-    private void initTTS() {
-        ttsManager = new TTSManager(this,ContentValue.bdAPI_KEY, ContentValue.bdSECRET_KYE);
-        ttsManager.setTTSListener(new TTSListener() {
-            @Override
-            public void onSpeechStart() {
-                Log.i(TAG, "TTS Start!");
-            }
-
-            @Override
-            public void onSpeechProgressChanged() {
-
-            }
-
-            @Override
-            public void onSpeechPause() {
-                Log.i(TAG, "TTS Pause!");
-            }
-
-            @Override
-            public void onSpeechFinish() {
-                Log.i(TAG, "TTS Finish!");
-            }
-
-            @Override
-            public void onSpeechError(int errorCode) {
-                Log.i(TAG, "TTS错误，错误码：" + errorCode);
-            }
-
-
-            @Override
-            public void onSpeechCancel() {
-                Log.i(TAG, "TTS Cancle!");
-            }
-        });
     }
 
     /**
@@ -197,59 +159,6 @@ public class ChatActivity extends AppCompatActivity {
             Log.i(TAG, "ERROR:" + errorMessage.getMessage());
         }
     };
-
-    /**
-     * 语音识别
-     * */
-    private void initVoice() {
-
-        mVoiceRecognizeManager=new VoiceRecognizeManager(context, ContentValue.bdAPI_KEY,ContentValue.bdSECRET_KYE);
-
-        mVoiceRecognizeManager.setVoiceRecognizeListener(new VoiceRecognizeListener() {
-            @Override
-            public void onStartRecognize() {
-                Log.i(TAG, "Recognize Start1");
-            }
-
-            @Override
-            public void onRecordStart() {
-                Log.i(TAG, "Recognize Start2");
-            }
-
-            @Override
-            public void onRecordEnd() {
-                Log.i(TAG, "Recognize End");
-                handler.sendEmptyMessage(RECOGNIZE_END);
-            }
-
-            @Override
-            public void onRecognizeResult(String s) {
-                Log.i(TAG,"识别成功"+s);
-                if (s!=null) {
-                    mTuringApiManager.requestTuringAPI(s);
-                    handler.obtainMessage(RECOGNIZE_RESULT,s).sendToTarget();
-                }else {
-                    //无法识别的语音
-                    handler.obtainMessage(RECOGNIZE_RESULT,"识别失败").sendToTarget();
-                }
-            }
-
-            @Override
-            public void onRecognizeError(String s) {
-                Log.i(TAG,"识别错误"+s);
-                if (s!=null) {
-                    handler.obtainMessage(RECOGNIZE_ERROR, s).sendToTarget();
-                }
-
-            }
-
-            @Override
-            public void onVolumeChange(int i) {
-                //讯飞调用
-            }
-        });
-
-    }
 
 
 
