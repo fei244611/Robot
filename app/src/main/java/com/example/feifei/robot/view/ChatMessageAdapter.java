@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.model.ChatMessage;
+import com.example.feifei.robot.util.ContentValue;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ChatMessageAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         ChatMessage msg=mDatas.get(position);
-        return msg.getType().equals("OUTPUT") ? 1 : 0;
+        return msg.getType().equals(ContentValue.OUTPUT) ? 1 : 0;
     }
 
     @Override

@@ -12,8 +12,10 @@ import android.widget.Button;
 import com.example.feifei.robot.R;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btn_chat;
     private Context context;
+    private Button btn_chat;
+    private Button btn_robot;
+    private Button btn_setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +28,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context,ChatActivity.class));
+                finish();
             }
         });
+
+        btn_robot= (Button) findViewById(R.id.btn_robot);
+        btn_robot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,RobotActivity.class));
+                finish();
+            }
+        });
+
+        btn_setting= (Button) findViewById(R.id.btn_setting);
+        btn_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,SettingActivity.class));
+                finish();
+            }
+        });
+
     }
 
     @Override

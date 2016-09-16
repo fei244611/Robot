@@ -74,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setClickable(true);
                     String result= (String) msg.obj;
                     //更新listView
-                    chatMessage=new ChatMessage("OUTPUT",result);
+                    chatMessage=new ChatMessage(ContentValue.OUTPUT,result);
                     mDatas.add(chatMessage);
                     mAdapter.notifyDataSetChanged();
 
@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                 case RESULT_OK:
                     String from=(String)msg.obj;
                     //更新listView
-                    chatMessage=new ChatMessage("INPUT",from);
+                    chatMessage=new ChatMessage(ContentValue.INPUT,from);
                     mDatas.add(chatMessage);
                     mAdapter.notifyDataSetChanged();
 
@@ -123,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //更新ListView
                 String str=et_recognizer.getText().toString();
-                chatMessage=new ChatMessage("OUTPUT",str);
+                chatMessage=new ChatMessage(ContentValue.OUTPUT,str);
                 mDatas.add(chatMessage);
                 mAdapter.notifyDataSetChanged();
 

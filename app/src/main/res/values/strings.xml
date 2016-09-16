@@ -9,4 +9,6 @@
     <string name="btn_recognizer">开始识别</string>
     <string name="tv_result">回复内容</string>
     <string name="btn_send">发送</string>
+    <string name="title_activity_robot">RobotActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
 </resources>
