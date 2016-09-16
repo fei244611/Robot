@@ -8,4 +8,5 @@
     <string name="tv_recognizer">开始识别</string>
     <string name="btn_recognizer">开始识别</string>
     <string name="tv_result">回复内容</string>
+    <string name="btn_send">发送</string>
 </resources>

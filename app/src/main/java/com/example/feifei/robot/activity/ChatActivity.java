@@ -11,12 +11,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.feifei.robot.R;
+import com.example.feifei.robot.model.ChatMessage;
 import com.example.feifei.robot.util.ContentValue;
 import com.example.feifei.robot.util.TTSUtil;
 import com.example.feifei.robot.util.VoiceUtil;
+import com.example.feifei.robot.view.ChatMessageAdapter;
 import com.turing.androidsdk.InitListener;
 import com.turing.androidsdk.SDKInit;
 import com.turing.androidsdk.SDKInitBuilder;
@@ -28,6 +32,9 @@ import com.turing.androidsdk.tts.TTSManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import turing.os.http.core.ErrorMessage;
 import turing.os.http.core.HttpConnectionListener;
@@ -47,9 +54,13 @@ public class ChatActivity extends AppCompatActivity {
     private TuringApiManager mTuringApiManager;
     private TTSManager ttsManager;
 
-    private TextView tv_recognizer;
-    private TextView tv_result;
+    private ListView lv_chat;
+    private EditText et_recognizer;
+    private Button btn_send;
     private Button btn_recognizer;
+    private List<ChatMessage> mDatas = new ArrayList<ChatMessage>();
+    private ChatMessageAdapter mAdapter;
+    private ChatMessage chatMessage;
 
     private Handler handler=new Handler(){
         @Override
@@ -62,18 +73,25 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setText("开始识别");
                     btn_recognizer.setClickable(true);
                     String result= (String) msg.obj;
-                    tv_recognizer.setText("识别结果"+result);
+                    //更新listView
+                    chatMessage=new ChatMessage("OUTPUT",result);
+                    mDatas.add(chatMessage);
+                    mAdapter.notifyDataSetChanged();
+
                     mTuringApiManager.requestTuringAPI(result);
                     break;
                 case RECOGNIZE_ERROR:
                     btn_recognizer.setText("开始识别");
                     btn_recognizer.setClickable(true);
-                    String error= (String) msg.obj;
-                    tv_recognizer.setText(error);
                     break;
                 case RESULT_OK:
-                    tv_result.setText((String)msg.obj);
-                    ttsManager.startTTS((String) msg.obj);
+                    String from=(String)msg.obj;
+                    //更新listView
+                    chatMessage=new ChatMessage("INPUT",from);
+                    mDatas.add(chatMessage);
+                    mAdapter.notifyDataSetChanged();
+
+                    ttsManager.startTTS(from);
                     break;
             }
         }
@@ -85,16 +103,34 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         context=this;
 
-        tv_recognizer= (TextView) findViewById(R.id.tv_recognizer);
-        tv_result= (TextView) findViewById(R.id.tv_result);
+        lv_chat= (ListView) findViewById(R.id.lv_chat);
+        et_recognizer= (EditText) findViewById(R.id.et_recognizer);
+        btn_send= (Button) findViewById(R.id.btn_send);
         btn_recognizer= (Button) findViewById(R.id.btn_recognizer);
 
         //语音识别
-        mVoiceRecognizeManager=VoiceUtil.initVoice(context,handler);
+        mVoiceRecognizeManager=VoiceUtil.initVoice(context, handler);
         //语音合成
         ttsManager= TTSUtil.initTTS(context,handler);
         //初始化SDK
         initSDK();
+
+        mAdapter=new ChatMessageAdapter(context,mDatas);
+        lv_chat.setAdapter(mAdapter);
+
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //更新ListView
+                String str=et_recognizer.getText().toString();
+                chatMessage=new ChatMessage("OUTPUT",str);
+                mDatas.add(chatMessage);
+                mAdapter.notifyDataSetChanged();
+
+                et_recognizer.setText("");
+                mTuringApiManager.requestTuringAPI(str);
+            }
+        });
 
         btn_recognizer.setOnClickListener(new View.OnClickListener() {
             @Override
