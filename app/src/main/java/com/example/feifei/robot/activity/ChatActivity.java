@@ -21,6 +21,8 @@ import com.turing.androidsdk.SDKInitBuilder;
 import com.turing.androidsdk.TuringApiManager;
 import com.turing.androidsdk.asr.VoiceRecognizeListener;
 import com.turing.androidsdk.asr.VoiceRecognizeManager;
+import com.turing.androidsdk.tts.TTSListener;
+import com.turing.androidsdk.tts.TTSManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,9 +39,11 @@ public class ChatActivity extends AppCompatActivity {
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
     private static final int RESULT_OK=4;
+    private static final int Speech_START=5;
 
     private VoiceRecognizeManager mVoiceRecognizeManager;
     private TuringApiManager mTuringApiManager;
+    private TTSManager ttsManager;
 
     private TextView tv_recognizer;
     private TextView tv_result;
@@ -66,6 +70,9 @@ public class ChatActivity extends AppCompatActivity {
                     break;
                 case RESULT_OK:
                     tv_result.setText((String)msg.obj);
+                    ttsManager.startTTS((String) msg.obj);
+                    break;
+                case Speech_START:
                     break;
             }
         }
@@ -81,6 +88,8 @@ public class ChatActivity extends AppCompatActivity {
         tv_result= (TextView) findViewById(R.id.tv_result);
         btn_recognizer= (Button) findViewById(R.id.btn_recognizer);
 
+        //语音合成
+        initTTS();
         //初始化SDK
         initSDK();
         //语音识别
@@ -95,6 +104,45 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    /**
+     * 语音合成
+     * */
+    private void initTTS() {
+        ttsManager = new TTSManager(this,ContentValue.bdAPI_KEY, ContentValue.bdSECRET_KYE);
+        ttsManager.setTTSListener(new TTSListener() {
+            @Override
+            public void onSpeechStart() {
+                Log.i(TAG, "TTS Start!");
+            }
+
+            @Override
+            public void onSpeechProgressChanged() {
+
+            }
+
+            @Override
+            public void onSpeechPause() {
+                Log.i(TAG, "TTS Pause!");
+            }
+
+            @Override
+            public void onSpeechFinish() {
+                Log.i(TAG, "TTS Finish!");
+            }
+
+            @Override
+            public void onSpeechError(int errorCode) {
+                Log.i(TAG, "TTS错误，错误码：" + errorCode);
+            }
+
+
+            @Override
+            public void onSpeechCancel() {
+                Log.i(TAG, "TTS Cancle!");
+            }
+        });
     }
 
     /**
@@ -146,7 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         public void onError(ErrorMessage errorMessage) {
-            Log.i(TAG, "ERROR:"+errorMessage.getMessage());
+            Log.i(TAG, "ERROR:" + errorMessage.getMessage());
         }
     };
 
