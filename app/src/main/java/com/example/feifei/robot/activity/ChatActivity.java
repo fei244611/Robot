@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.model.ChatMessage;
 import com.example.feifei.robot.util.ContentValue;
+import com.example.feifei.robot.util.TRUtil;
 import com.example.feifei.robot.util.TTSUtil;
 import com.example.feifei.robot.util.VoiceUtil;
 import com.example.feifei.robot.view.ChatMessageAdapter;
@@ -49,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
     private static final int RESULT_OK=4;
+    private static final int SPEAK_OK=5;
 
     //语音识别管理
     private VoiceRecognizeManager mVoiceRecognizeManager;
@@ -98,6 +100,8 @@ public class ChatActivity extends AppCompatActivity {
 
                     ttsManager.startTTS(from);
                     break;
+                case SPEAK_OK:
+                    break;
             }
         }
     };
@@ -117,8 +121,8 @@ public class ChatActivity extends AppCompatActivity {
         mVoiceRecognizeManager=VoiceUtil.initVoice(context, handler);
         //初始化语音合成
         ttsManager= TTSUtil.initTTS(context,handler);
-        //初始化SDK
-        initSDK();
+        //初始化图灵
+        mTuringApiManager= TRUtil.InitTRapi(context,handler);
         //设置listview适配对象
         mAdapter=new ChatMessageAdapter(context,mDatas);
         lv_chat.setAdapter(mAdapter);
@@ -149,59 +153,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-
-    /**
-     * 初始化SDK
-     * */
-    private void initSDK() {
-        //1.初始化sdkInit
-        SDKInitBuilder builder = new SDKInitBuilder(this)
-                .setSecret(ContentValue.trSECRET_KEY).setTuringKey(ContentValue.trAPI_KEY)
-                .setUniqueId(ContentValue.trUNIQUE_ID);
-
-        SDKInit.init(builder, new InitListener() {
-            @Override
-            public void onFail(String error) {
-                Log.i(TAG, error);
-            }
-
-            @Override
-            public void onComplete() {
-                Log.i(TAG, "SDK Complete");
-                // 2.请求图灵服务器，需要请求必须在此回调成功，才可正确请求
-                mTuringApiManager = new TuringApiManager(context);
-                mTuringApiManager.setHttpListener(myHttpConnectionListener);
-            }
-        });
-    }
-
-    /**
-     * 网络请求回调
-     */
-    HttpConnectionListener myHttpConnectionListener = new HttpConnectionListener() {
-
-        @Override
-        public void onSuccess(RequestResult result) {
-            if (result != null) {
-                try {
-                    Log.i(TAG, result.getContent().toString());
-                    //解析图灵服务器返回消息
-                    JSONObject result_obj = new JSONObject(result.getContent().toString());
-                    if (result_obj.has("text")) {
-                        Log.i(TAG, result_obj.get("text").toString());
-                        handler.obtainMessage(RESULT_OK, result_obj.get("text")).sendToTarget();
-                    }
-                } catch (JSONException e) {
-                    Log.i(TAG, "JSONException:" + e.getMessage());
-                }
-            }
-        }
-
-        @Override
-        public void onError(ErrorMessage errorMessage) {
-            Log.i(TAG, "ERROR:" + errorMessage.getMessage());
-        }
-    };
 
 
 

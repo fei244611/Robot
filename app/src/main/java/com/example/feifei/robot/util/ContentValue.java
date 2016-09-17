@@ -22,4 +22,5 @@ public class ContentValue {
     public static String SETTING_DESK="setting_desk";
     public static String SETTING_CHAT="setting_chat";
 
+
 }
