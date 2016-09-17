@@ -18,7 +18,7 @@ public class ContentValue {
     public static String INPUT="INPUT";
     public static String OUTPUT="OUTPUT";
 
-    //设置信息
+    //设置信息存储
     public static String SETTING_DESK="setting_desk";
     public static String SETTING_CHAT="setting_chat";
 

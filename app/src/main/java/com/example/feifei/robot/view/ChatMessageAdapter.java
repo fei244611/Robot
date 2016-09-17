@@ -44,11 +44,17 @@ public class ChatMessageAdapter extends BaseAdapter {
         return position;
     }
 
+    /**
+     * 获取ListView 包含的view类别总数
+     */
     @Override
     public int getViewTypeCount() {
         return 2;
     }
 
+    /**
+     * 获取当前栏目的view类别
+     * */
     @Override
     public int getItemViewType(int position) {
         ChatMessage msg=mDatas.get(position);
@@ -59,6 +65,7 @@ public class ChatMessageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ChatMessage chatMessage = mDatas.get(position);
         ViewHolder viewHolder;
+        //复用convertView和对应组件
         if (convertView==null){
             int type = getItemViewType(position);
             if (type==1) {
@@ -67,6 +74,7 @@ public class ChatMessageAdapter extends BaseAdapter {
                 viewHolder.tv_createDate = (TextView) convertView.findViewById(R.id.rtime);
                 viewHolder.tv_content = (TextView) convertView.findViewById(R.id.rtv);
                 viewHolder.iv_image= (ImageView) convertView.findViewById(R.id.riv);
+                //设置view标识
                 convertView.setTag(viewHolder);
             }else {
                 viewHolder=new ViewHolder();
@@ -76,6 +84,7 @@ public class ChatMessageAdapter extends BaseAdapter {
                 convertView.setTag(viewHolder);
             }
         }else {
+            //获取view标识
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.tv_content.setText(chatMessage.getMsg());
@@ -85,7 +94,6 @@ public class ChatMessageAdapter extends BaseAdapter {
 
     private class ViewHolder{
         public TextView tv_createDate;
-        public TextView tv_name;
         public TextView tv_content;
         private ImageView iv_image;
     }

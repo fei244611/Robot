@@ -44,14 +44,17 @@ public class ChatActivity extends AppCompatActivity {
 
     private Context context;
     private static final String TAG="ChatActivity";
+    //主线程更新标识
     private static final int RECOGNIZE_END=1;
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
     private static final int RESULT_OK=4;
 
-
+    //语音识别管理
     private VoiceRecognizeManager mVoiceRecognizeManager;
+    //图灵api管理
     private TuringApiManager mTuringApiManager;
+    //语音合成管理
     private TTSManager ttsManager;
 
     private ListView lv_chat;
@@ -70,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setText("识别中");
                     break;
                 case RECOGNIZE_RESULT:
+                    //完成语音识别并将消息发送给图灵
                     btn_recognizer.setText("开始识别");
                     btn_recognizer.setClickable(true);
                     String result= (String) msg.obj;
@@ -85,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
                     btn_recognizer.setClickable(true);
                     break;
                 case RESULT_OK:
+                    //接受图灵回复消息并将文本转化为语音
                     String from=(String)msg.obj;
                     //更新listView
                     chatMessage=new ChatMessage(ContentValue.INPUT,from);
@@ -108,16 +113,17 @@ public class ChatActivity extends AppCompatActivity {
         btn_send= (Button) findViewById(R.id.btn_send);
         btn_recognizer= (Button) findViewById(R.id.btn_recognizer);
 
-        //语音识别
+        //初始化语音识别
         mVoiceRecognizeManager=VoiceUtil.initVoice(context, handler);
-        //语音合成
+        //初始化语音合成
         ttsManager= TTSUtil.initTTS(context,handler);
         //初始化SDK
         initSDK();
-
+        //设置listview适配对象
         mAdapter=new ChatMessageAdapter(context,mDatas);
         lv_chat.setAdapter(mAdapter);
 
+        //文本聊天
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +138,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //语音聊天
         btn_recognizer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +154,7 @@ public class ChatActivity extends AppCompatActivity {
      * 初始化SDK
      * */
     private void initSDK() {
-
+        //1.初始化sdkInit
         SDKInitBuilder builder = new SDKInitBuilder(this)
                 .setSecret(ContentValue.trSECRET_KEY).setTuringKey(ContentValue.trAPI_KEY)
                 .setUniqueId(ContentValue.trUNIQUE_ID);
@@ -161,7 +168,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onComplete() {
                 Log.i(TAG, "SDK Complete");
-                // 获取userid成功后，才可以请求Turing服务器，需要请求必须在此回调成功，才可正确请求
+                // 2.请求图灵服务器，需要请求必须在此回调成功，才可正确请求
                 mTuringApiManager = new TuringApiManager(context);
                 mTuringApiManager.setHttpListener(myHttpConnectionListener);
             }
@@ -178,8 +185,8 @@ public class ChatActivity extends AppCompatActivity {
             if (result != null) {
                 try {
                     Log.i(TAG, result.getContent().toString());
+                    //解析图灵服务器返回消息
                     JSONObject result_obj = new JSONObject(result.getContent().toString());
-
                     if (result_obj.has("text")) {
                         Log.i(TAG, result_obj.get("text").toString());
                         handler.obtainMessage(RESULT_OK, result_obj.get("text")).sendToTarget();

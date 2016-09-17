@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.feifei.robot.R;
 
 /**
+ * 系统设置栏目View
  * Created by feifei on 16-9-16.
  */
 public class ItemView extends RelativeLayout{
@@ -23,8 +24,8 @@ public class ItemView extends RelativeLayout{
 
     public ItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        View view = View.inflate(context, R.layout.view_item, null);
-        this.addView(view);
+        View.inflate(context, R.layout.view_item, null);
+
         cb_box = (CheckBox) findViewById(R.id.cb_box);
         tv_title= (TextView) findViewById(R.id.tv_title);
 
@@ -38,6 +39,10 @@ public class ItemView extends RelativeLayout{
         return cb_box.isChecked();
     }
 
+    /**
+     * 设置栏目点击与单选框状态同步
+     * @param isCheck   单选框状态
+     */
     public void setCheck(boolean isCheck){
         cb_box.setChecked(isCheck);
     }

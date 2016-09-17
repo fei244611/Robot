@@ -13,13 +13,23 @@ import com.turing.androidsdk.asr.VoiceRecognizeManager;
  */
 public class VoiceUtil {
 
+    //ui线程更新标识
     private static final int RECOGNIZE_END=1;
     private static final int RECOGNIZE_RESULT=2;
     private static final int RECOGNIZE_ERROR=3;
     private static final String TAG="VoiceUtil";
 
+
+    /**
+     *  初始化语音识别
+     * @param context   上下文环境
+     * @param handler   更新UI线程
+     * @return  返回语音识别对象
+     */
     public static VoiceRecognizeManager initVoice(Context context, final Handler handler){
+        //初始化语音识别，需百度秘钥
         VoiceRecognizeManager manager=new VoiceRecognizeManager(context,ContentValue.bdAPI_KEY,ContentValue.bdSECRET_KYE);
+        //设置监听语音识别
         manager.setVoiceRecognizeListener(new VoiceRecognizeListener() {
             @Override
             public void onStartRecognize() {

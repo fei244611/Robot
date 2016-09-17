@@ -13,8 +13,16 @@ import com.turing.androidsdk.tts.TTSManager;
 public class TTSUtil {
     private static final String TAG="TTSUtil";
 
+    /**
+     *  初始化语音合成
+     * @param context   上下文环境
+     * @param handler   UI线程更新
+     * @return  返回语音合成对象
+     */
     public static TTSManager initTTS(Context context,final Handler handler){
+        //初始化语音合成,需百度语音秘钥
         TTSManager ttsManager= new TTSManager(context,ContentValue.bdAPI_KEY, ContentValue.bdSECRET_KYE);
+        //设置监听语音合成
         ttsManager.setTTSListener(new TTSListener() {
             @Override
             public void onSpeechStart() {
