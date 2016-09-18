@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(2000);
                     if (SPUtil.getBoolean(context,ContentValue.IS_FIRST,false)){
-                        startActivity(new Intent(context,TestActivity.class));
+                        startActivity(new Intent(context,HomeActivity.class));
                         finish();
                     }else {
                         SPUtil.putBoolean(context,ContentValue.IS_FIRST,true);
