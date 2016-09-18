@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.util.ContentValue;
@@ -22,8 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context=this;
         setContentView(R.layout.activity_main);
-
+        initAnimation();
         initData();
+    }
+
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+        alphaAnimation.setDuration(2000);
+        RelativeLayout rl_root= (RelativeLayout) findViewById(R.id.rl_root);
+        rl_root.startAnimation(alphaAnimation);
     }
 
     private void initData() {

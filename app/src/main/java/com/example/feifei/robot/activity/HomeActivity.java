@@ -74,19 +74,19 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (position) {
             case 0:
                 fragment = new RobotFragment();
-                title = getString(R.string.title_home);
-                break;
-            case 2:
-                fragment = new HistoryFragment();
-                title = getString(R.string.title_friends);
+                title = "Robot";
                 break;
             case 1:
                 fragment = new ChatFragment();
-                title = getString(R.string.title_messages);
+                title = "Message";
+                break;
+            case 2:
+                fragment = new HistoryFragment();
+                title = "History";
                 break;
             case 3:
                 fragment=new SettingFragment();
-                title=getString(R.string.title_voice);
+                title="Setting";
             default:
                 break;
         }

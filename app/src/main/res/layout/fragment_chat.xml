@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ListView android:layout_width="match_parent" android:layout_height="0dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_weight="1"
+        android:transcriptMode="alwaysScroll"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:id="@+id/lv_chat"></ListView>
+
+    <RelativeLayout
+        android:id="@+id/ly_chat_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingBottom="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/content_bg">
+
+
+        <!--<Button
+            android:text="@string/btn_recognizer"
+            android:id="@+id/btn_recognizer"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+            -->
+        <Button
+            android:text="@string/btn_send"
+            android:id="@+id/btn_send"
+            android:background="@drawable/send_button"
+            android:textColor="#757575"
+            android:layout_width="60dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/btn_send">
+            <Button
+                android:id="@+id/btn_recognizer"
+                android:background="@drawable/recognizer"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            <EditText
+                android:id="@+id/et_recognizer"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/send_text"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/btn_recognizer"
+                android:layout_toEndOf="@+id/btn_recognizer" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>

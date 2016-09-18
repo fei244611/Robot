@@ -36,6 +36,10 @@ public class ItemView extends RelativeLayout{
         tv_title.setText(title);
     }
 
+    public void setvisable(){
+        cb_box.setVisibility(INVISIBLE);
+    }
+
     public boolean isCheck(){
         return cb_box.isChecked();
     }

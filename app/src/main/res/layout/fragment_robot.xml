@@ -1,0 +1,42 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/robot_bg"
+    tools:context="com.example.feifei.robot.activity.RobotActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="16sp"
+                android:id="@+id/tv_chat_robot"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_below="@+id/tv_chat_robot"
+                android:gravity="center_horizontal"
+                android:background="@drawable/huatong"
+                android:id="@+id/btn_chat_robot"
+                android:layout_width="54dp"
+                android:layout_height="54dp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:src="@drawable/duola1"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_width="260dp"
+        android:layout_height="280dp"
+        android:layout_marginBottom="50dp"
+        android:id="@+id/iv_duola" />
+
+</FrameLayout>

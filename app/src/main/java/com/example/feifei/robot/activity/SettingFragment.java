@@ -21,7 +21,7 @@ public class SettingFragment extends Fragment {
     private Context context;
     private ItemView setting_desk;
     private ItemView setting_chat;
-
+    private ItemView setting_data;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -40,12 +40,16 @@ public class SettingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_setting, container, false);
         setting_desk= (ItemView) rootView.findViewById(R.id.setting_desk);
         setting_chat= (ItemView) rootView.findViewById(R.id.setting_chat);
-        setting_desk.setTitle("开启宠物桌面显示");
-        setting_chat.setTitle("开启智能语音聊天");
+        setting_data= (ItemView) rootView.findViewById(R.id.setting_data);
+        setting_desk.setTitle("宠物桌面显示");
+        setting_chat.setTitle("智能语音聊天");
+        setting_data.setTitle("查看宠物资料");
+
         final Boolean desk= SPUtil.getBoolean(context, ContentValue.SETTING_DESK, false);
         Boolean chat=SPUtil.getBoolean(context, ContentValue.SETTING_CHAT, false);
         setting_desk.setCheck(desk);
         setting_chat.setCheck(chat);
+        setting_data.setvisable();
 
         setting_desk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +68,11 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 Boolean check=setting_chat.isCheck();
                 setting_chat.setCheck(!check);
+                if (!check){
+                    SPUtil.putBoolean(context,ContentValue.SETTING_CHAT,true);
+                }else {
+                    SPUtil.putBoolean(context,ContentValue.SETTING_CHAT,false);
+                }
             }
         });
 

@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.feifei.robot.R;
 import com.example.feifei.robot.model.ChatMessage;
 import com.example.feifei.robot.util.ContentValue;
+import com.example.feifei.robot.util.SPUtil;
 import com.example.feifei.robot.util.TRUtil;
 import com.example.feifei.robot.util.TTSUtil;
 import com.example.feifei.robot.util.VoiceUtil;
@@ -85,8 +86,9 @@ public class ChatFragment extends Fragment {
                     chatMessage=new ChatMessage(ContentValue.INPUT,from);
                     mDatas.add(chatMessage);
                     mAdapter.notifyDataSetChanged();
-
-                    ttsManager.startTTS(from);
+                    if (SPUtil.getBoolean(context,ContentValue.SETTING_CHAT,false)) {
+                        ttsManager.startTTS(from);
+                    }
                     break;
                 case SPEAK_OK:
                     break;
@@ -107,7 +109,7 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_chat, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         context=getActivity();
 
         lv_chat= (ListView) rootView.findViewById(R.id.lv_chat);
@@ -122,6 +124,7 @@ public class ChatFragment extends Fragment {
         //初始化图灵
         mTuringApiManager= TRUtil.InitTRapi(context, handler);
         //设置listview适配对象
+        mDatas.add(new ChatMessage(ContentValue.INPUT,"你好啊，有什么想问的吗?"));
         mAdapter=new ChatMessageAdapter(context,mDatas);
         lv_chat.setAdapter(mAdapter);
 

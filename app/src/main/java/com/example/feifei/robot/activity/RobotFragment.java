@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.feifei.robot.R;
+import com.example.feifei.robot.util.ContentValue;
+import com.example.feifei.robot.util.SPUtil;
 import com.example.feifei.robot.util.TRUtil;
 import com.example.feifei.robot.util.TTSUtil;
 import com.example.feifei.robot.util.VoiceUtil;
@@ -39,29 +42,32 @@ public class RobotFragment extends Fragment {
     private TTSManager ttsManager;
 
     private Button btn_chat;
+    private TextView tv_chat;
 
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case RECOGNIZE_END:
-                    btn_chat.setText("识别中");
+                    tv_chat.setText("识别中");
                     break;
                 case RECOGNIZE_RESULT:
                     //完成语音识别并将消息发送给图灵
-                    btn_chat.setText("开始识别");
+                    tv_chat.setText("");
                     btn_chat.setClickable(true);
                     String result= (String) msg.obj;
                     mTuringApiManager.requestTuringAPI(result);
                     break;
                 case RECOGNIZE_ERROR:
-                    btn_chat.setText("开始识别");
+                    tv_chat.setText("");
                     btn_chat.setClickable(true);
                     break;
                 case RESULT_OK:
                     //接受图灵回复消息并将文本转化为语音
                     String from=(String)msg.obj;
-                    ttsManager.startTTS(from);
+                    if (SPUtil.getBoolean(context, ContentValue.SETTING_CHAT, false)) {
+                        ttsManager.startTTS(from);
+                    }
                     break;
                 case SPEAK_OK:
                     break;
@@ -83,8 +89,9 @@ public class RobotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context=getActivity();
-        View rootView = inflater.inflate(R.layout.activity_robot, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_robot, container, false);
         btn_chat= (Button) rootView.findViewById(R.id.btn_chat_robot);
+        tv_chat= (TextView) rootView.findViewById(R.id.tv_chat_robot);
 
         //初始化语音识别
         mVoiceRecognizeManager= VoiceUtil.initVoice(context, handler);
@@ -97,7 +104,7 @@ public class RobotFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mVoiceRecognizeManager.startRecognize();
-                btn_chat.setText("说话中...");
+                tv_chat.setText("说话中...");
                 btn_chat.setClickable(false);
             }
         });
