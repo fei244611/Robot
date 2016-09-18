@@ -73,19 +73,19 @@ public class HomeActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                //fragment = new HomeFragment();
+                fragment = new RobotFragment();
                 title = getString(R.string.title_home);
                 break;
             case 2:
-                //fragment = new FriendsFragment();
+                fragment = new HistoryFragment();
                 title = getString(R.string.title_friends);
                 break;
             case 1:
-                //fragment = new MessagesFragment();
+                fragment = new ChatFragment();
                 title = getString(R.string.title_messages);
                 break;
             case 3:
-                //fragment=new VoiceFragment();
+                fragment=new SettingFragment();
                 title=getString(R.string.title_voice);
             default:
                 break;
