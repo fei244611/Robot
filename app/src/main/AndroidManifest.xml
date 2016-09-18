@@ -27,25 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.ChatActivity"
-            android:label="@string/title_activity_chat" >
-        </activity>
-        <activity
-            android:name=".activity.RobotActivity"
-            android:label="@string/title_activity_robot" >
-        </activity>
-        <activity
-            android:name=".activity.SettingActivity"
-            android:label="@string/title_activity_setting" >
-        </activity>
 
         <service android:name=".Service.RobotService" />
 
-        <activity
-            android:name=".activity.TestActivity"
-            android:label="@string/title_activity_test" >
-        </activity>
         <activity
             android:name=".activity.FirstActivity"
             android:label="@string/title_activity_first" >

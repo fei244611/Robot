@@ -15,8 +15,6 @@ import com.example.feifei.robot.R;
 
 public class FirstActivity extends AppCompatActivity {
     private Context context;
-    private CheckBox cb_chat;
-    private Switch st_desk;
     private Button btn_first;
 
     @Override
@@ -25,14 +23,12 @@ public class FirstActivity extends AppCompatActivity {
         context=this;
         setContentView(R.layout.activity_first);
 
-        cb_chat= (CheckBox) findViewById(R.id.cb_chat);
-        st_desk= (Switch) findViewById(R.id.st_desk);
         btn_first= (Button) findViewById(R.id.btn_first);
 
         btn_first.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context,TestActivity.class));
+                startActivity(new Intent(context,HomeActivity.class));
                 finish();
             }
         });
