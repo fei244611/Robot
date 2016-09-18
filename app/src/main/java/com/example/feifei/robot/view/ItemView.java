@@ -19,16 +19,17 @@ public class ItemView extends RelativeLayout{
     private TextView tv_title;
 
     public ItemView(Context context) {
+
         super(context);
+
     }
 
     public ItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        View.inflate(context, R.layout.view_item, null);
+        View.inflate(context, R.layout.view_item, this);
 
-        cb_box = (CheckBox) findViewById(R.id.cb_box);
-        tv_title= (TextView) findViewById(R.id.tv_title);
-
+        cb_box = (CheckBox) findViewById(R.id.cb_setting);
+        tv_title= (TextView) findViewById(R.id.tv_setting);
     }
 
     public void setTitle(String title){

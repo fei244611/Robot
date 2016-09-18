@@ -22,5 +22,7 @@ public class ContentValue {
     public static String SETTING_DESK="setting_desk";
     public static String SETTING_CHAT="setting_chat";
 
+    //是否初次登陆
+    public static String IS_FIRST="first";
 
 }

@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context="com.example.feifei.robot.activity.FirstActivity">
+
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_photo" />
+    <RelativeLayout
+        android:id="@+id/rl_name"
+        android:gravity="center"
+        android:layout_below="@id/iv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_name"
+            android:text="给你的宠物起个名字吧"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:hint="哆啦a梦"
+            android:id="@+id/et_name"
+            android:layout_below="@id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:gravity="center"
+        android:id="@+id/rl_first"
+        android:layout_below="@id/rl_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/cb_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Switch
+            android:id="@+id/st_desk"
+            android:layout_toRightOf="@id/cb_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <Button
+        android:text="next"
+        android:id="@+id/btn_first"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rl_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

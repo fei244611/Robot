@@ -2,7 +2,6 @@ package com.example.feifei.robot.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.sax.StartElementListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,45 +10,51 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.feifei.robot.R;
-import com.example.feifei.robot.util.ContentValue;
-import com.example.feifei.robot.util.SPUtil;
 
-public class MainActivity extends AppCompatActivity {
+public class TestActivity extends AppCompatActivity {
     private Context context;
+    private Button btn_chat;
+    private Button btn_robot;
+    private Button btn_setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_test);
         context=this;
-        setContentView(R.layout.activity_main);
 
-        initData();
-    }
-
-    private void initData() {
-        new Thread(new Runnable() {
+        btn_chat= (Button) findViewById(R.id.btn_chat);
+        btn_chat.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                try {
-                    Thread.sleep(2000);
-                    if (SPUtil.getBoolean(context,ContentValue.IS_FIRST,false)){
-                        startActivity(new Intent(context,TestActivity.class));
-                        finish();
-                    }else {
-                        SPUtil.putBoolean(context,ContentValue.IS_FIRST,true);
-                        startActivity(new Intent(context, FirstActivity.class));
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            public void onClick(View v) {
+                startActivity(new Intent(context,ChatActivity.class));
+                finish();
             }
-        }).start();
+        });
+
+        btn_robot= (Button) findViewById(R.id.btn_robot);
+        btn_robot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,RobotActivity.class));
+                finish();
+            }
+        });
+
+        btn_setting= (Button) findViewById(R.id.btn_setting);
+        btn_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, SettingActivity.class));
+                finish();
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_test, menu);
         return true;
     }
 
