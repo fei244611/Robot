@@ -65,6 +65,14 @@ public class RobotService extends Service {
         animationDrawable.start();
         mWM.addView(mRobotView, params);
 
+        //设置view点击监听
+        mRobotView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         //设置view触摸监听
         mRobotView.setOnTouchListener(new View.OnTouchListener() {
             private int startX;

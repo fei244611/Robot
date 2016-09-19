@@ -86,7 +86,7 @@ public class ChatFragment extends Fragment {
                     chatMessage=new ChatMessage(ContentValue.INPUT,from);
                     mDatas.add(chatMessage);
                     mAdapter.notifyDataSetChanged();
-                    if (SPUtil.getBoolean(context,ContentValue.SETTING_CHAT,false)) {
+                    if (SPUtil.getBoolean(context,ContentValue.SETTING_CHAT,true)) {
                         ttsManager.startTTS(from);
                     }
                     break;

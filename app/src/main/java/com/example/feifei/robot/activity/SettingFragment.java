@@ -46,7 +46,7 @@ public class SettingFragment extends Fragment {
         setting_data.setTitle("查看宠物资料");
 
         final Boolean desk= SPUtil.getBoolean(context, ContentValue.SETTING_DESK, false);
-        Boolean chat=SPUtil.getBoolean(context, ContentValue.SETTING_CHAT, false);
+        Boolean chat=SPUtil.getBoolean(context, ContentValue.SETTING_CHAT, true);
         setting_desk.setCheck(desk);
         setting_chat.setCheck(chat);
         setting_data.setvisable();

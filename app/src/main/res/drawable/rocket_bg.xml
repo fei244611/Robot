@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- 第一张图片,火焰较短 -->
-    <item android:drawable="@drawable/desktop_rocket_launch_1"
+    <item android:drawable="@drawable/duolaa1"
        	android:duration="200"/>
     <!-- 第二张图片,火焰较长 -->
-    <item android:drawable="@drawable/desktop_rocket_launch_2"
+    <item android:drawable="@drawable/duolaa2"
        	android:duration="200"/>
+    <item android:drawable="@drawable/duolaa3"
+        android:duration="200"/>
+    <item android:drawable="@drawable/duolaa4"
+        android:duration="200"/>
 </animation-list>
